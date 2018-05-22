@@ -6,7 +6,7 @@
 const express = require('express');
 const app = express();
 const crypto = require('crypto');
-const config = require('./wechat.config.js');
+const config = require('./wechat.config.json');
 
 app.get('/wechat', (req, res) => {
     let query = {
@@ -18,7 +18,7 @@ app.get('/wechat', (req, res) => {
     let tmpStr = [config.token, query.timestamp, query.nonce].sort().join('');
     const hash = crypto.createHash('sha1');
     tmpStr = hash.update(tmpStr, 'utf8').digest('hex');
-    console.log(query.signature, tmpStr);
+    console.log(query.signature, tmpStr, config.token);
 
     let result = tmpStr === query.signature ? query.echostr : 'error';
     res.send(result);
